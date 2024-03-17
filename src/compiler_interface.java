@@ -30,9 +30,8 @@ public class compiler_interface {
 		shell.setSize(800, 600);
 
 		ToolBar toolBar = new ToolBar(shell, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
-		createToolItem(toolBar, "Novo");
-		createToolItem(toolBar, "Abrir");
-		createToolItem(toolBar, "Salvar");
+		toolBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		createToolItems(toolBar);
 
 		SashForm sashForm = new SashForm(shell, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -95,14 +94,34 @@ public class compiler_interface {
 			}
 		});
 
-		// Defina a margem esquerda do editor aqui:
+		//margem esquerda do editor;
 		int leftMarginWidth = 30;
 		editor.setLeftMargin(leftMarginWidth); // Definindo a margem esquerda
 	}
 
-	private void createToolItem(ToolBar toolBar, String text) {
+	private void createToolItems(ToolBar toolBar) {
+		String[][] toolItems = { { "Novo", "Novo [ctrl-n]" }, { "Abrir", "Abrir [ctrl-o]" },
+				{ "Salvar", "Salvar [ctrl-s]" }, { "Copiar", "Copiar [ctrl-c]" }, { "Colar", "Colar [ctrl-v]" },
+				{ "Recortar", "Recortar [ctrl-x]" }, { "Compilar", "Compilar [F7]" }, { "Equipe", "Equipe [F1]" } };
+
+		for (String[] item : toolItems) {
+			createToolItem(toolBar, item[0], item[1]);
+		}
+	}
+
+	private void createToolItem(ToolBar toolBar, String command, String text) {
 		ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setText(text);
+		item.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				performAction(command);
+			}
+		});
+	}
+
+	private void performAction(String command) {
+		// Acões
 	}
 
 	public void updateStatusBar(String filePath) {
