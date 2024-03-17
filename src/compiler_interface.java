@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public class compiler_interface {
 	
+	private String currentFilePath = null;
 	private Shell shell;
 	private Label statusBar;
 	private StyledText editor;
@@ -132,12 +133,13 @@ public class compiler_interface {
             editor.setText("");
             messageArea.setText("");
             statusBar.setText("Pronto");
+            currentFilePath = "";
             break;
         case "Abrir":
             abrirArquivo();
             break;
         case "Salvar":
-           // salvarArquivo();
+           salvarArquivo();
             break;
         case "Copiar":
             editor.copy();
@@ -159,19 +161,43 @@ public class compiler_interface {
 
 	private void abrirArquivo() {
 		FileDialog dialog = new FileDialog(shell, SWT.OPEN);
-		dialog.setFilterExtensions(new String[] { "*.txt" }); // filtro para arquivos .txt
-		String path = dialog.open();
-		if (path != null) {
+		dialog.setFilterExtensions(new String[] { "*.txt" }); 
+		currentFilePath = dialog.open();
+		if (currentFilePath != null) {
 			try {
-				String content = new String(Files.readAllBytes(Path.of(path)));
+				String content = new String(Files.readAllBytes(Path.of(currentFilePath)));
 				editor.setText(content);
 				messageArea.setText("");
-				statusBar.setText("Arquivo aberto: " + path);
+				statusBar.setText("Arquivo aberto: " + currentFilePath);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
+	
+	private void salvarArquivo() {
+		if (currentFilePath == null || currentFilePath.isEmpty()) {
+		    FileDialog dialog = new FileDialog(shell, SWT.SAVE);
+		    dialog.setFilterExtensions(new String[]{"*.txt"});
+		    String path = dialog.open();
+		    if (path != null && !path.isEmpty()) {
+		        currentFilePath = path;
+		    }
+		}
+
+		if (currentFilePath != null && !currentFilePath.isEmpty()) {
+		    try {
+		        Files.writeString(Path.of(currentFilePath), editor.getText());
+		        messageArea.setText("");
+		        statusBar.setText("Arquivo salvo: " + currentFilePath);
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        messageArea.setText("Erro ao salvar o arquivo: " + e.getMessage());
+		    }
+		}
+
+	}
+
 
 	public void updateStatusBar(String filePath) {
 		statusBar.setText("Aberto: " + filePath);
