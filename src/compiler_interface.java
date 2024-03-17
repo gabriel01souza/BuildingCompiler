@@ -153,8 +153,8 @@ public class compiler_interface {
         case "Compilar":
             messageArea.setText("Compilação de programas ainda não foi implementada");
             break;
-        case "Equipe":
-            messageArea.setText("Equipe de desenvolvimento: Nome1, Nome2, Nome3");
+        case "Equipe":            //Ordem alfabetica
+            messageArea.setText("Equipe de desenvolvimento: Daniel de Paula, Gabriel Cardoso de Souza, Umberto Oliveira de Araújo Neto Leonetti");
             break;
 		}
 	}
