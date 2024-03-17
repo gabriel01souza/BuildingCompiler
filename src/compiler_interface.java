@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 public class compiler_interface {
-	
+
 	private String currentFilePath = null;
 	private Shell shell;
 	private Label statusBar;
@@ -35,6 +35,7 @@ public class compiler_interface {
 		shell.setText("Interface solicitada");
 		shell.setLayout(new GridLayout(1, false));
 		shell.setSize(800, 600);
+		configureKeyListeners();
 
 		ToolBar toolBar = new ToolBar(shell, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
@@ -127,41 +128,73 @@ public class compiler_interface {
 		});
 	}
 
+	private void configureKeyListeners() {
+		Display.getCurrent().addFilter(SWT.KeyDown, event -> {
+			if ((event.stateMask & SWT.CTRL) != 0) {
+				switch (event.keyCode) {
+				case 'n':
+					performAction("Novo");
+					break;
+				case 'o':
+					performAction("Abrir");
+					break;
+				case 's':
+					performAction("Salvar");
+					break;
+				case 'c':
+					performAction("Copiar");
+					break;
+				case 'v':
+					performAction("Colar");
+					break;
+				case 'x':
+					performAction("Recortar");
+					break;
+				}
+			} else if (event.keyCode == SWT.F1) {
+				performAction("Equipe");
+			} else if (event.keyCode == SWT.F7) {
+				performAction("Compilar");
+			}
+		});
+	}
+
 	private void performAction(String command) {
 		switch (command) {
-        case "Novo":
-            editor.setText("");
-            messageArea.setText("");
-            statusBar.setText("Pronto");
-            currentFilePath = "";
-            break;
-        case "Abrir":
-            abrirArquivo();
-            break;
-        case "Salvar":
-           salvarArquivo();
-            break;
-        case "Copiar":
-            editor.copy();
-            break;
-        case "Colar":
-            editor.paste();
-            break;
-        case "Recortar":
-            editor.cut();
-            break;
-        case "Compilar":
-            messageArea.setText("Compilação de programas ainda não foi implementada");
-            break;
-        case "Equipe":            //Ordem alfabetica
-            messageArea.setText("Equipe de desenvolvimento: Daniel de Paula, Gabriel Cardoso de Souza, Umberto Oliveira de Araújo Neto Leonetti");
-            break;
+		case "Novo":
+			editor.setText("");
+			messageArea.setText("");
+			statusBar.setText("Pronto");
+			currentFilePath = "";
+			break;
+		case "Abrir":
+			abrirArquivo();
+			break;
+		case "Salvar":
+			salvarArquivo();
+			break;
+		case "Copiar":
+			editor.copy();
+			break;
+		case "Colar":
+			editor.paste();
+			break;
+		case "Recortar":
+			editor.cut();
+			break;
+		case "Compilar":
+			messageArea.setText("Compilação de programas ainda não foi implementada");
+			break;
+		case "Equipe": // Ordem alfabetica
+			messageArea.setText(
+					"Equipe de desenvolvimento: Daniel de Paula, Gabriel Cardoso de Souza, Umberto Oliveira de Araújo Neto Leonetti");
+			break;
 		}
 	}
 
 	private void abrirArquivo() {
 		FileDialog dialog = new FileDialog(shell, SWT.OPEN);
-		dialog.setFilterExtensions(new String[] { "*.txt" }); 
+		dialog.setFilterExtensions(new String[] { "*.txt" });
 		currentFilePath = dialog.open();
 		if (currentFilePath != null) {
 			try {
@@ -174,30 +207,29 @@ public class compiler_interface {
 			}
 		}
 	}
-	
+
 	private void salvarArquivo() {
 		if (currentFilePath == null || currentFilePath.isEmpty()) {
-		    FileDialog dialog = new FileDialog(shell, SWT.SAVE);
-		    dialog.setFilterExtensions(new String[]{"*.txt"});
-		    String path = dialog.open();
-		    if (path != null && !path.isEmpty()) {
-		        currentFilePath = path;
-		    }
+			FileDialog dialog = new FileDialog(shell, SWT.SAVE);
+			dialog.setFilterExtensions(new String[] { "*.txt" });
+			String path = dialog.open();
+			if (path != null && !path.isEmpty()) {
+				currentFilePath = path;
+			}
 		}
 
 		if (currentFilePath != null && !currentFilePath.isEmpty()) {
-		    try {
-		        Files.writeString(Path.of(currentFilePath), editor.getText());
-		        messageArea.setText("");
-		        statusBar.setText("Arquivo salvo: " + currentFilePath);
-		    } catch (IOException e) {
-		        e.printStackTrace();
-		        messageArea.setText("Erro ao salvar o arquivo: " + e.getMessage());
-		    }
+			try {
+				Files.writeString(Path.of(currentFilePath), editor.getText());
+				messageArea.setText("");
+				statusBar.setText("Arquivo salvo: " + currentFilePath);
+			} catch (IOException e) {
+				e.printStackTrace();
+				messageArea.setText("Erro ao salvar o arquivo: " + e.getMessage());
+			}
 		}
 
 	}
-
 
 	public void updateStatusBar(String filePath) {
 		statusBar.setText("Aberto: " + filePath);
