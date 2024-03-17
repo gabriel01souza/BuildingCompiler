@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
@@ -10,13 +14,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 public class compiler_interface {
-
+	
+	private Shell shell;
 	private Label statusBar;
 	private StyledText editor;
 	private Canvas lineNumbers;
@@ -24,7 +30,7 @@ public class compiler_interface {
 	private Composite editorComposite;
 
 	public compiler_interface(Display display) {
-		Shell shell = new Shell(display);
+		shell = new Shell(display);
 		shell.setText("Interface solicitada");
 		shell.setLayout(new GridLayout(1, false));
 		shell.setSize(800, 600);
@@ -131,7 +137,7 @@ public class compiler_interface {
             abrirArquivo();
             break;
         case "Salvar":
-            salvarArquivo();
+           // salvarArquivo();
             break;
         case "Copiar":
             editor.copy();
@@ -148,6 +154,23 @@ public class compiler_interface {
         case "Equipe":
             messageArea.setText("Equipe de desenvolvimento: Nome1, Nome2, Nome3");
             break;
+		}
+	}
+
+	private void abrirArquivo() {
+		FileDialog dialog = new FileDialog(shell, SWT.OPEN);
+		dialog.setFilterExtensions(new String[] { "*.txt" }); // filtro para arquivos .txt
+		String path = dialog.open();
+		if (path != null) {
+			try {
+				String content = new String(Files.readAllBytes(Path.of(path)));
+				editor.setText(content);
+				messageArea.setText("");
+				statusBar.setText("Arquivo aberto: " + path);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void updateStatusBar(String filePath) {
