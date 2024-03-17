@@ -94,7 +94,7 @@ public class compiler_interface {
 			}
 		});
 
-		//margem esquerda do editor;
+		// margem esquerda do editor;
 		int leftMarginWidth = 30;
 		editor.setLeftMargin(leftMarginWidth); // Definindo a margem esquerda
 	}
@@ -121,7 +121,33 @@ public class compiler_interface {
 	}
 
 	private void performAction(String command) {
-		// Acões
+		switch (command) {
+        case "Novo":
+            editor.setText("");
+            messageArea.setText("");
+            statusBar.setText("Pronto");
+            break;
+        case "Abrir":
+            abrirArquivo();
+            break;
+        case "Salvar":
+            salvarArquivo();
+            break;
+        case "Copiar":
+            editor.copy();
+            break;
+        case "Colar":
+            editor.paste();
+            break;
+        case "Recortar":
+            editor.cut();
+            break;
+        case "Compilar":
+            messageArea.setText("Compilação de programas ainda não foi implementada");
+            break;
+        case "Equipe":
+            messageArea.setText("Equipe de desenvolvimento: Nome1, Nome2, Nome3");
+            break;
 	}
 
 	public void updateStatusBar(String filePath) {
