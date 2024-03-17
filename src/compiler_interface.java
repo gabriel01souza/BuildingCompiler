@@ -32,7 +32,7 @@ public class compiler_interface {
 
 	public compiler_interface(Display display) {
 		shell = new Shell(display);
-		shell.setText("Interface solicitada");
+		shell.setText("Compilador");
 		shell.setLayout(new GridLayout(1, false));
 		shell.setSize(800, 600);
 		configureKeyListeners();
