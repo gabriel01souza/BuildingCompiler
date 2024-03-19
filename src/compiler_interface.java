@@ -139,7 +139,7 @@ public class compiler_interface {
 	private void createToolItem(ToolBar toolBar, String command, String text) {
 		
 		ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-        Image image = new Image(display,"C:\\Users\\PAY2121\\Downloads\\icons8-new-file-50.png");
+        Image image = new Image(display,"imgs/novo.png");
         item.setImage(image);
 		item.setText(text);
 		item.addSelectionListener(new SelectionAdapter() {
