@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -22,6 +23,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public class compiler_interface {
 
+	static Display display = null;
 	private String currentFilePath = null;
 	private Shell shell;
 	private Label statusBar;
@@ -32,35 +34,52 @@ public class compiler_interface {
 
 	public compiler_interface(Display display) {
 		shell = new Shell(display);
+		shell.setSize(882, 512);
 		shell.setText("Compilador");
-		shell.setLayout(new GridLayout(1, false));
-		shell.setSize(800, 600);
+		GridLayout gl_shell = new GridLayout(2, false);
+		gl_shell.marginBottom = 1;
+		shell.setLayout(gl_shell);
+		shell.setMinimumSize(900, 600);
 		configureKeyListeners();
-
-		ToolBar toolBar = new ToolBar(shell, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
-		toolBar.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		createToolItems(toolBar);
+		new Label(shell, SWT.NONE);
+				new Label(shell, SWT.NONE);
+		
+				ToolBar toolBar = new ToolBar(shell, SWT.BORDER | SWT.FLAT | SWT.WRAP | SWT.RIGHT | SWT.SHADOW_OUT | SWT.VERTICAL);
+				GridData gd_toolBar = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+				gd_toolBar.heightHint = 100;
+				gd_toolBar.minimumWidth = 570;
+				gd_toolBar.minimumHeight = 150;
+				gd_toolBar.widthHint = 154;
+				toolBar.setLayoutData(gd_toolBar);
+				createToolItems(toolBar);
 
 		SashForm sashForm = new SashForm(shell, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		editorComposite = new Composite(sashForm, SWT.NONE);
-		editorComposite.setLayout(new GridLayout(2, false));
+		GridLayout gl_editorComposite = new GridLayout(2, false);
+		gl_editorComposite.marginWidth = 0;
+		editorComposite.setLayout(gl_editorComposite);
 		editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		lineNumbers = new Canvas(editorComposite, SWT.NONE);
-		GridData lineNumbersData = new GridData(SWT.LEFT, SWT.FILL, false, true);
-		lineNumbersData.widthHint = 25; // Ajuste a largura
+		GridData lineNumbersData = new GridData(SWT.LEFT, SWT.TOP, false, true);
+		lineNumbersData.widthHint = 20; // Ajuste a largura
 		lineNumbers.setLayoutData(lineNumbersData);
 
 		editor = new StyledText(editorComposite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		editor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridData gd_editor = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd_editor.heightHint = 218;
+		editor.setLayoutData(gd_editor);
+		new Label(editorComposite, SWT.NONE);
+		
+				messageArea = new StyledText(editorComposite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+				messageArea.setLeftMargin(20);
+				messageArea.setEditable(false);
+				messageArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		messageArea = new StyledText(sashForm, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		messageArea.setEditable(false);
-		messageArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		sashForm.setWeights(new int[] { 70, 30 });
+		sashForm.setWeights(new int[] { 70 });
+		new Label(shell, SWT.NONE);
 
 		statusBar = new Label(shell, SWT.BORDER);
 		statusBar.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false));
@@ -104,7 +123,7 @@ public class compiler_interface {
 
 		// margem esquerda do editor;
 		int leftMarginWidth = 30;
-		editor.setLeftMargin(leftMarginWidth); // Definindo a margem esquerda
+		editor.setLeftMargin(20); // Definindo a margem esquerda
 	}
 
 	private void createToolItems(ToolBar toolBar) {
@@ -118,7 +137,10 @@ public class compiler_interface {
 	}
 
 	private void createToolItem(ToolBar toolBar, String command, String text) {
+		
 		ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+        Image image = new Image(display,"C:\\Users\\PAY2121\\Downloads\\icons8-new-file-50.png");
+        item.setImage(image);
 		item.setText(text);
 		item.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -126,6 +148,7 @@ public class compiler_interface {
 				performAction(command);
 			}
 		});
+		
 	}
 
 	private void configureKeyListeners() {
@@ -236,7 +259,7 @@ public class compiler_interface {
 	}
 
 	public static void main(String[] args) {
-		Display display = new Display();
+		display = new Display();
 		new compiler_interface(display);
 		display.dispose();
 	}
