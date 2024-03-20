@@ -1,10 +1,8 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -13,18 +11,15 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.layout.RowData;
 
 public class compiler_interface<Buttons> {
 
@@ -36,14 +31,7 @@ public class compiler_interface<Buttons> {
 	private Canvas lineNumbers;
 	private StyledText messageArea;
 	private Composite editorComposite;
-	private Button btnNewButton;
 	private Canvas canvas;
-	private Button btnAbrir;
-	private Button btnCopiar;
-	private Button btnColar;
-	private Button btnRecortar;
-	private Button btnCompilar;
-	private Button btnEquipe;
 
 	public compiler_interface(Display display) {
 		shell = new Shell(display);
@@ -269,6 +257,7 @@ public class compiler_interface<Buttons> {
 		statusBar.setText("Aberto: " + filePath);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) {
 		display = new Display();
 		new compiler_interface(display);
