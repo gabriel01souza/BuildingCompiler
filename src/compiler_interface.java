@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -20,8 +21,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.RowData;
 
-public class compiler_interface {
+public class compiler_interface<Buttons> {
 
 	static Display display = null;
 	private String currentFilePath = null;
@@ -31,30 +36,36 @@ public class compiler_interface {
 	private Canvas lineNumbers;
 	private StyledText messageArea;
 	private Composite editorComposite;
+	private Button btnNewButton;
+	private Canvas canvas;
+	private Button btnAbrir;
+	private Button btnCopiar;
+	private Button btnColar;
+	private Button btnRecortar;
+	private Button btnCompilar;
+	private Button btnEquipe;
 
 	public compiler_interface(Display display) {
 		shell = new Shell(display);
 		shell.setSize(882, 512);
 		shell.setText("Compilador");
-		GridLayout gl_shell = new GridLayout(2, false);
-		gl_shell.marginBottom = 1;
-		shell.setLayout(gl_shell);
 		shell.setMinimumSize(900, 600);
 		configureKeyListeners();
+		shell.setLayout(new GridLayout(2, false));
 		new Label(shell, SWT.NONE);
-				new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
 		
-				ToolBar toolBar = new ToolBar(shell, SWT.BORDER | SWT.FLAT | SWT.WRAP | SWT.RIGHT | SWT.SHADOW_OUT | SWT.VERTICAL);
-				GridData gd_toolBar = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-				gd_toolBar.heightHint = 100;
-				gd_toolBar.minimumWidth = 570;
-				gd_toolBar.minimumHeight = 150;
-				gd_toolBar.widthHint = 154;
-				toolBar.setLayoutData(gd_toolBar);
-				createToolItems(toolBar);
-
+		canvas = new Canvas(shell, SWT.NONE);
+		canvas.setLayout(new RowLayout(SWT.HORIZONTAL));
+		GridData gd_canvas = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_canvas.widthHint = 126;
+		canvas.setLayoutData(gd_canvas);
+		
+		// CRIAÇÃO DOS BOTÕES
+		createButtons();
+		
 		SashForm sashForm = new SashForm(shell, SWT.VERTICAL);
-		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		editorComposite = new Composite(sashForm, SWT.NONE);
 		GridLayout gl_editorComposite = new GridLayout(2, false);
@@ -64,10 +75,12 @@ public class compiler_interface {
 
 		lineNumbers = new Canvas(editorComposite, SWT.NONE);
 		GridData lineNumbersData = new GridData(SWT.LEFT, SWT.TOP, false, true);
-		lineNumbersData.widthHint = 20; // Ajuste a largura
+		lineNumbersData.heightHint = 48;
+		lineNumbersData.widthHint = 23; // Ajuste a largura
 		lineNumbers.setLayoutData(lineNumbersData);
 
 		editor = new StyledText(editorComposite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		editor.setWrapIndent(1);
 		GridData gd_editor = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd_editor.heightHint = 218;
 		editor.setLayoutData(gd_editor);
@@ -82,7 +95,7 @@ public class compiler_interface {
 		new Label(shell, SWT.NONE);
 
 		statusBar = new Label(shell, SWT.BORDER);
-		statusBar.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false));
+		statusBar.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false, 1, 1));
 		statusBar.setText("Barra de status");
 
 		configureLineNumbers();
@@ -123,32 +136,30 @@ public class compiler_interface {
 
 		// margem esquerda do editor;
 		int leftMarginWidth = 30;
-		editor.setLeftMargin(20); // Definindo a margem esquerda
+		editor.setLeftMargin(leftMarginWidth); // Definindo a margem esquerda
 	}
 
-	private void createToolItems(ToolBar toolBar) {
-		String[][] toolItems = { { "Novo", "Novo [ctrl-n]" }, { "Abrir", "Abrir [ctrl-o]" },
+	private void createButtons() {
+		String[][] buttonOptions = { { "Novo", "Novo [ctrl-n]" }, { "Abrir", "Abrir [ctrl-o]" },
 				{ "Salvar", "Salvar [ctrl-s]" }, { "Copiar", "Copiar [ctrl-c]" }, { "Colar", "Colar [ctrl-v]" },
 				{ "Recortar", "Recortar [ctrl-x]" }, { "Compilar", "Compilar [F7]" }, { "Equipe", "Equipe [F1]" } };
 
-		for (String[] item : toolItems) {
-			createToolItem(toolBar, item[0], item[1]);
+		for (String[] option : buttonOptions) {
+			createButton(option[0], option[1]);
 		}
 	}
 
-	private void createToolItem(ToolBar toolBar, String command, String text) {
-		
-		ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-        Image image = new Image(display,"C:\\Users\\PAY2121\\Downloads\\icons8-new-file-50.png");
-        item.setImage(image);
-		item.setText(text);
-		item.addSelectionListener(new SelectionAdapter() {
+	private void createButton(String command, String text) {
+
+		Button btnNovoFile = new Button(canvas, SWT.NONE);
+		btnNovoFile.setLayoutData(new RowData(120, 50));
+		btnNovoFile.setText(text);
+		btnNovoFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				performAction(command);
 			}
 		});
-		
 	}
 
 	private void configureKeyListeners() {
@@ -263,5 +274,4 @@ public class compiler_interface {
 		new compiler_interface(display);
 		display.dispose();
 	}
-
 }
