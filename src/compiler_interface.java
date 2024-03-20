@@ -7,7 +7,10 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.GCData;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -32,6 +35,7 @@ public class compiler_interface<Buttons> {
 	private StyledText messageArea;
 	private Composite editorComposite;
 	private Canvas canvas;
+	private Button btnNewButton;
 
 	public compiler_interface(Display display) {
 		shell = new Shell(display);
@@ -44,9 +48,9 @@ public class compiler_interface<Buttons> {
 		new Label(shell, SWT.NONE);
 		
 		canvas = new Canvas(shell, SWT.NONE);
-		canvas.setLayout(new RowLayout(SWT.HORIZONTAL));
+		canvas.setLayout(new RowLayout(SWT.VERTICAL));
 		GridData gd_canvas = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-		gd_canvas.widthHint = 126;
+		gd_canvas.widthHint = 159;
 		canvas.setLayoutData(gd_canvas);
 		
 		// CRIAÇÃO DOS BOTÕES
@@ -128,21 +132,24 @@ public class compiler_interface<Buttons> {
 	}
 
 	private void createButtons() {
-		String[][] buttonOptions = { { "Novo", "Novo [ctrl-n]" }, { "Abrir", "Abrir [ctrl-o]" },
-				{ "Salvar", "Salvar [ctrl-s]" }, { "Copiar", "Copiar [ctrl-c]" }, { "Colar", "Colar [ctrl-v]" },
-				{ "Recortar", "Recortar [ctrl-x]" }, { "Compilar", "Compilar [F7]" }, { "Equipe", "Equipe [F1]" } };
+		String[][] buttonOptions = { { "Novo", "Novo [ctrl-n]", "add.png" }, { "Abrir", "Abrir [ctrl-o]", "open.png" },
+				{ "Salvar", "Salvar [ctrl-s]", "save.png" }, { "Copiar", "Copiar [ctrl-c]", "copy.png" }, { "Colar", "Colar [ctrl-v]", "paste.png" },
+				{ "Recortar", "Recortar [ctrl-x]", "cut.png" }, { "Compilar", "Compilar [F7]", "compile.png" }, { "Equipe", "Equipe [F1]", "team.png" } };
 
 		for (String[] option : buttonOptions) {
-			createButton(option[0], option[1]);
+			createButton(option[0], option[1], option[2]);
 		}
 	}
 
-	private void createButton(String command, String text) {
+	private void createButton(String command, String text, String localeImg) {
+	    Image image = new Image(display, this.getClass().getResourceAsStream("./images/"+localeImg));
 
-		Button btnNovoFile = new Button(canvas, SWT.NONE);
-		btnNovoFile.setLayoutData(new RowData(120, 50));
-		btnNovoFile.setText(text);
-		btnNovoFile.addSelectionListener(new SelectionAdapter() {
+
+		Button btn = new Button(canvas, SWT.NONE);
+		btn.setLayoutData(new RowData(150, 50));
+		btn.setText(text);
+		btn.setImage(image);
+		btn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				performAction(command);
