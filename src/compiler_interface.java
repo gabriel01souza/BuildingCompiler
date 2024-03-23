@@ -7,9 +7,9 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Device;
+//import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.GCData;
+//import org.eclipse.swt.graphics.GCData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -35,7 +35,7 @@ public class compiler_interface<Buttons> {
 	private StyledText messageArea;
 	private Composite editorComposite;
 	private Canvas canvas;
-	private Button btnNewButton;
+	//private Button btnNewButton;
 
 	public compiler_interface(Display display) {
 		shell = new Shell(display);
