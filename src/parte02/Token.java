@@ -1,5 +1,6 @@
 package parte02;
 
+
 public class Token
 {
     private int id;
