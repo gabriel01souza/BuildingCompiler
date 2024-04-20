@@ -35,7 +35,8 @@ public class compiler_interface<Buttons> {
 	private StyledText messageArea;
 	private Composite editorComposite;
 	private Canvas canvas;
-	//private Button btnNewButton;
+	private CompiladorService compiladorService = new CompiladorService();
+	// private Button btnNewButton;
 
 	public compiler_interface(Display display) {
 		shell = new Shell(display);
@@ -46,16 +47,16 @@ public class compiler_interface<Buttons> {
 		shell.setLayout(new GridLayout(2, false));
 		new Label(shell, SWT.NONE);
 		new Label(shell, SWT.NONE);
-		
+
 		canvas = new Canvas(shell, SWT.NONE);
 		canvas.setLayout(new RowLayout(SWT.VERTICAL));
 		GridData gd_canvas = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_canvas.widthHint = 159;
 		canvas.setLayoutData(gd_canvas);
-		
+
 		// CRIAÇÃO DOS BOTÕES
 		createButtons();
-		
+
 		SashForm sashForm = new SashForm(shell, SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
@@ -77,11 +78,11 @@ public class compiler_interface<Buttons> {
 		gd_editor.heightHint = 218;
 		editor.setLayoutData(gd_editor);
 		new Label(editorComposite, SWT.NONE);
-		
-				messageArea = new StyledText(editorComposite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-				messageArea.setLeftMargin(20);
-				messageArea.setEditable(false);
-				messageArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		messageArea = new StyledText(editorComposite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		messageArea.setLeftMargin(20);
+		messageArea.setEditable(false);
+		messageArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		sashForm.setWeights(new int[] { 70 });
 		new Label(shell, SWT.NONE);
@@ -133,8 +134,9 @@ public class compiler_interface<Buttons> {
 
 	private void createButtons() {
 		String[][] buttonOptions = { { "Novo", "Novo [ctrl-n]", "add.png" }, { "Abrir", "Abrir [ctrl-o]", "open.png" },
-				{ "Salvar", "Salvar [ctrl-s]", "save.png" }, { "Copiar", "Copiar [ctrl-c]", "copy.png" }, { "Colar", "Colar [ctrl-v]", "paste.png" },
-				{ "Recortar", "Recortar [ctrl-x]", "cut.png" }, { "Compilar", "Compilar [F7]", "compile.png" }, { "Equipe", "Equipe [F1]", "team.png" } };
+				{ "Salvar", "Salvar [ctrl-s]", "save.png" }, { "Copiar", "Copiar [ctrl-c]", "copy.png" },
+				{ "Colar", "Colar [ctrl-v]", "paste.png" }, { "Recortar", "Recortar [ctrl-x]", "cut.png" },
+				{ "Compilar", "Compilar [F7]", "compile.png" }, { "Equipe", "Equipe [F1]", "team.png" } };
 
 		for (String[] option : buttonOptions) {
 			createButton(option[0], option[1], option[2]);
@@ -142,8 +144,7 @@ public class compiler_interface<Buttons> {
 	}
 
 	private void createButton(String command, String text, String localeImg) {
-	    Image image = new Image(display, this.getClass().getResourceAsStream("./images/"+localeImg));
-
+		Image image = new Image(display, this.getClass().getResourceAsStream("./images/" + localeImg));
 
 		Button btn = new Button(canvas, SWT.NONE);
 		btn.setLayoutData(new RowData(150, 50));
@@ -213,6 +214,7 @@ public class compiler_interface<Buttons> {
 			break;
 		case "Compilar":
 			messageArea.setText("Compilação de programas ainda não foi implementada");
+			this.compilar(editor.getText());
 			break;
 		case "Equipe": // Ordem alfabetica
 			messageArea.setText(
@@ -257,11 +259,16 @@ public class compiler_interface<Buttons> {
 				messageArea.setText("Erro ao salvar o arquivo: " + e.getMessage());
 			}
 		}
-
 	}
 
 	public void updateStatusBar(String filePath) {
 		statusBar.setText("Aberto: " + filePath);
+	}
+	
+	public void compilar(String code) {
+		// Garantindo que é o codigo que o dev colocou!
+		messageArea.setText(code);
+		compiladorService.compilar(code);
 	}
 
 	@SuppressWarnings("rawtypes")

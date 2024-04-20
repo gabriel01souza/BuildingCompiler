@@ -1,3 +1,5 @@
+package parte02;
+
 public interface Constants extends ScannerConstants
 {
     int EPSILON  = 0;
@@ -47,5 +49,25 @@ public interface Constants extends ScannerConstants
     int t_TOKEN_43 = 43; //"!="
     int t_TOKEN_44 = 44; //"<"
     int t_TOKEN_45 = 45; //">"
+    
+    // TODO FUTURAMENTE, VERIFCAR SE É POSSÍVEL TROCAR AS CONSTANTES DE CIMA POR ESSAS AQUI.
+//    int t_TOKEN_MAIS = 28; //"+"
+//    int t_TOKEN_MENOS = 29; //"-"
+//    int t_TOKEN_ASTERISCO = 30; //"*"
+//    int t_TOKEN_BARRA = 31; //"/"
+//    int t_TOKEN_VIRGULA = 32; //","
+//    int t_TOKEN_PONTO = 33; //"."
+//    int t_TOKEN_PONTO_VIRGULA = 34; //";"
+//    int t_TOKEN_ATRBUICAO = 35; //"="
+//    int t_TOKEN_DOIS_PONTOS = 36; //":"
+//    int t_TOKEN_ABRE_PARENTESES = 37; //"("
+//    int t_TOKEN_FECHA_PARENTESES = 38; //")"
+//    int t_TOKEN_E_COMERCIAL = 39; //"&"
+//    int t_TOKEN_BARRA_VERTICAL = 40; //"|"
+//    int t_TOKEN_EXCLAMACAO = 41; //"!"
+//    int t_TOKEN_IGUAL = 42; //"=="
+//    int t_TOKEN_DIFERENTE = 43; //"!="
+//    int t_TOKEN_MENOR_QUE = 44; //"<"
+//    int t_TOKEN_MAIOR_QUE = 45; //">"
 
 }
