@@ -1,6 +1,3 @@
-package parte02;
-
-
 public interface Constants extends ScannerConstants
 {
     int EPSILON  = 0;

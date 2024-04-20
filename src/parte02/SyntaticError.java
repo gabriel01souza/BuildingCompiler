@@ -1,6 +1,3 @@
-package parte02;
-
-
 public class SyntaticError extends AnalysisError
 {
     public SyntaticError(String msg, int position)

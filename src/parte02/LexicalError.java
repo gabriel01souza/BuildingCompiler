@@ -1,6 +1,3 @@
-package parte02;
-
-
 public class LexicalError extends AnalysisError
 {
     public LexicalError(String msg, int position)

@@ -1,7 +1,3 @@
-package parte02;
-
-
-
 public class AnalysisError extends Exception
 {
     private int position;
