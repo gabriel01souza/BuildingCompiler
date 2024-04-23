@@ -31,5 +31,9 @@ public class Token
     public String toString()
     {
         return id+" ( "+lexeme+" ) @ "+position;
-    };
+    }
+
+	public void setPosition(int i) {
+		this.position = i;
+	};
 }
