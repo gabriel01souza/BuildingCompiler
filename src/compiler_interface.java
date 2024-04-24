@@ -213,7 +213,7 @@ public class compiler_interface<Buttons> {
 			editor.cut();
 			break;
 		case "Compilar":
-			messageArea.setText("Compilação de programas ainda não foi implementada");
+//			messageArea.setText("Compilação de programas ainda não foi implementada");
 			this.compilar(editor.getText());
 			break;
 		case "Equipe": // Ordem alfabetica
@@ -267,8 +267,7 @@ public class compiler_interface<Buttons> {
 	
 	public void compilar(String code) {
 		// Garantindo que é o codigo que o dev colocou!
-		messageArea.setText(code);
-		compiladorService.compilar(code);
+		compiladorService.compilar(code, editor, messageArea);
 	}
 
 	@SuppressWarnings("rawtypes")

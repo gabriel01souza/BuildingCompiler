@@ -38,7 +38,7 @@ public class Lexico implements Constants
         int endState = -1;
         int end = -1;
 
-        while (hasInput())
+        while (hasInput() )
         {
             lastState = state;
             state = nextState(nextChar(), state);

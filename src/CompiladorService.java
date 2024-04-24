@@ -2,56 +2,49 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.swt.custom.StyledText;
+
+import Implementations.Pair.Pair;
 import parte02.LexicalError;
 import parte02.Lexico;
 import parte02.Token;
 
 public class CompiladorService {
 
-	List<Token> tokens = new ArrayList<Token>();
+	List<Pair<Integer, Token>> tokens = new ArrayList<Pair<Integer, Token>>();
+	StyledText editor = null;
 
-	public void compilar(String code) {
-		String[] lines = code.split("\n");
-		lines = limparLinhasVazias(lines);
-		Lexico lexico = new Lexico(code);
-		for (int i = 0; i < lines.length; i++) {
-			String line = lines[i];
-			lexico = new Lexico(line);
-			String[] numberOfWords = line.split(" ");
-			int j = 0; // controle para ao dar o "nextToken"
+	public void compilar(String code, StyledText editor, StyledText messageArea) {
+		this.editor = editor;
+		Lexico lexico = new Lexico(code.replaceAll(" ", ""));
+		try {
 
-			try {
-				Token token = lexico.nextToken();
-				while (Objects.nonNull(token) && j < numberOfWords.length) {
-					System.out.println("Linha: " + i + " " + token);
-					if ((j + 1) != numberOfWords.length) {
-						token = lexico.nextToken();
-					}
-					j++;
-				}
-
-			} catch (LexicalError e) {
-				// TODO Auto-generated catch block
-				System.out.println("Erro na linha " + i);
-				e.printStackTrace();
+			while (Objects.nonNull(lexico.nextToken())) {  // Só falta o lexico ler espaço em branco, AAAAAAAAA
+//				tokens.add(new Pair())
 			}
-		}
-	}
 
-	public String[] limparLinhasVazias(String[] lines) {
-		String[] newLines = new String[lines.length];
-		
-		for (int i = 0; i < lines.length; i++) {
-			String line = lines[i];
-			line = line.replace("\r","");
-			int l = line.length();
-			if (l > 0) {
-				newLines[i] = line;
+		} catch (LexicalError e) {
+			System.out.println(e);
+
+			if ("simbolo inválido".equals(e.getMessage())) {
+				messageArea.setText("Erro na linha " + getLinha(e.getPosition()) + " - "
+						+ editor.getText().charAt(e.getPosition()) + " " + e.getMessage());
 			} else {
-				newLines[i] = "";
+				messageArea.setText("Erro na linha " + getLinha(e.getPosition()) + " - " + e.getMessage());
 			}
 		}
-		return newLines;
+
 	}
 
+	private String getLinha(int position) {
+		int linhasEncontradas = 0;
+		int areaCodigoLength = editor.getText().length();
+
+		for (int i = 0; i < position && i < areaCodigoLength; i++) {
+			if (editor.getText().charAt(i) == '\n') {
+				linhasEncontradas++;
+			}
+		}
+		return String.valueOf(linhasEncontradas + 1);
+	}
 }
