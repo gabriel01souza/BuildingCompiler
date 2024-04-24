@@ -6,6 +6,7 @@ import parte02.Token;
 
 public class CompiladorService {
 
+<<<<<<< Updated upstream
     List<Token> tokens = new ArrayList<>();
     private boolean inBlockComment = false; // Estado para acompanhar se estamos dentro de um comentário de bloco
 
@@ -17,10 +18,30 @@ public class CompiladorService {
             try {
                 String processedLine = inBlockComment ? checkEndOfBlockComment(lines[i], i + 1) : checkBlockComments(lines[i], i + 1);
                 if (processedLine.isEmpty() && inBlockComment) continue;  // Ignora linhas vazias dentro de comentários de bloco
+=======
+	List<Pair<Integer, Token>> tokens = new ArrayList<Pair<Integer, Token>>();
+	List<Token> tokens2 = new ArrayList<>();
+	StyledText editor = null;
+
+	public void compilar(String code, StyledText editor, StyledText messageArea) {
+		this.editor = editor;
+		Lexico lexico = new Lexico(code);
+		Token token;
+		
+		try {
+
+			while ((token = lexico.nextToken()) != null) {  // Só falta o lexico ler espaço em branco, AAAAAAAAA
+				
+				tokens2.add(token);
+				System.out.println("Token lido: " + token + " Linha: " + getLinha(token.getPosition()));
+				
+			}
+>>>>>>> Stashed changes
 
                 Lexico lexico = new Lexico(processedLine);
                 int linePosition = 0;
 
+<<<<<<< Updated upstream
                 Token token = lexico.nextToken();
                 while (token != null) {
                     token.setPosition(cumulativePosition + token.getPosition());  // Ajusta a posição global do token
@@ -30,6 +51,17 @@ public class CompiladorService {
                     token = lexico.nextToken();
                 }
                 System.out.println("--------------------------------------------------------------------------");
+=======
+			if ("simbolo inválido".equals(e.getMessage())) {
+				messageArea.setText("Erro na linha " + getLinha(e.getPosition()) + " - "
+						+ editor.getText().charAt(e.getPosition()) + " " + e.getMessage());
+			} else {
+				messageArea.setText("Erro na linha " + getLinha(e.getPosition()) + " - " + e.getMessage());
+			}
+			
+			
+		}
+>>>>>>> Stashed changes
 
             } catch (LexicalError e) {
                 System.out.println("Erro léxico na linha " + (i + 1) + " na posição " + (cumulativePosition + e.getPosition()) + ": " + e.getMessage());
@@ -69,4 +101,14 @@ public class CompiladorService {
         return ""; // Continua dentro do comentário de bloco
     }
 
+<<<<<<< Updated upstream
+=======
+		for (int i = 0; i < position && i < areaCodigoLength; i++) {
+			if (editor.getText().charAt(i) == '\n') {
+				linhasEncontradas++;
+			}
+		}
+		return String.valueOf(linhasEncontradas + 1); 
+	}
+>>>>>>> Stashed changes
 }
