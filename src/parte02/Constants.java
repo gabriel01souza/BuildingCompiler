@@ -5,12 +5,14 @@ public interface Constants extends ScannerConstants
     int EPSILON  = 0;
     int DOLLAR   = 1;
 
+    // constantes
     int t_id = 2;
     int t_cint = 3;
     int t_cfloat = 4;
     int t_cbin = 5;
     int t_chexa = 6;
     int t_cstr = 7;
+    // tipos
     int t_bin = 8;
     int t_bool = 9;
     int t_elif = 10;
@@ -31,6 +33,7 @@ public interface Constants extends ScannerConstants
     int t_true = 25;
     int t_repeat = 26;
     int t_until = 27;
+    // simbolo especial
     int t_TOKEN_28 = 28; //"+"
     int t_TOKEN_29 = 29; //"-"
     int t_TOKEN_30 = 30; //"*"

@@ -1124,10 +1124,10 @@ public interface ScannerConstants
 
     String[] SCANNER_ERROR =
     {
-        "Caractere n�o esperado",
+        "símbolo inválido",
         "",
         "",
-        "Erro identificando cstr",
+        "constante_str inválida",
         "Erro identificando cbin ou chexa",
         "",
         "",
@@ -1150,15 +1150,15 @@ public interface ScannerConstants
         "",
         "",
         "",
-        "Erro identificando cbin",
-        "Erro identificando chexa",
-        "Erro identificando <ignorar>",
+        "constante_bin inválida",
+        "constante_hexa inválida",
+        "Comentário de bloco inválido ou não finalizado",
         "Erro identificando cfloat",
         "",
         "",
         "",
         "",
-        "Erro identificando <ignorar>",
+        "Comentário de bloco inválido ou não finalizado",
         "",
         "",
         "Erro identificando cfloat"
