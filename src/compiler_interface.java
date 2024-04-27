@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -144,19 +145,31 @@ public class compiler_interface<Buttons> {
 	}
 
 	private void createButton(String command, String text, String localeImg) {
-		Image image = new Image(display, this.getClass().getResourceAsStream("./images/" + localeImg));
+	    InputStream imageStream = getClass().getResourceAsStream("/images/" + localeImg); // Ajuste no caminho
+	    if (imageStream == null) {
+	        System.err.println("Imagem não encontrada: " + localeImg);
+	        return; // Sai do método se a imagem não for encontrada
+	    }
+	    Image image = new Image(display, imageStream);
 
-		Button btn = new Button(canvas, SWT.NONE);
-		btn.setLayoutData(new RowData(150, 50));
-		btn.setText(text);
-		btn.setImage(image);
-		btn.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				performAction(command);
-			}
-		});
+	    Button btn = new Button(canvas, SWT.NONE);
+	    btn.setLayoutData(new RowData(150, 50));
+	    btn.setText(text);
+	    btn.setImage(image);
+	    btn.addSelectionListener(new SelectionAdapter() {
+	        @Override
+	        public void widgetSelected(SelectionEvent e) {
+	            performAction(command);
+	        }
+	    });
+
+	    try {
+	        imageStream.close(); // Importante fechar o stream após o uso
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 	}
+
 
 	private void configureKeyListeners() {
 		Display.getCurrent().addFilter(SWT.KeyDown, event -> {
