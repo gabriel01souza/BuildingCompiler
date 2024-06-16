@@ -2,6 +2,7 @@ import org.eclipse.swt.custom.StyledText;
 
 import parte3.LexicalError;
 import parte3.Lexico;
+import parte3.ParserConstants;
 import parte3.SemanticError;
 import parte3.Semantico;
 import parte3.Sintatico;
@@ -34,11 +35,21 @@ public class CompiladorService {
 		} catch (SyntaticError e) {
 			Token tokenAtual = sintatico.getCurrentToken();
 
-			messageArea.setText("Erro na linha " + getLinha(e.getPosition()) + " - encontrado " + tokenAtual.getLexeme()
-					+ " " + e.getMessage());
+			messageArea.setText("Erro na linha " + getLinha(e.getPosition()) + " - encontrado "
+					+ getDescription(tokenAtual) + " " + e.getMessage());
 		} catch (SemanticError e) {
 			// Trata erros semânticos
 		}
+	}
+
+	private String getDescription(Token tokenAtual) {
+		String descricao = ParserConstants.PARSER_ERROR[tokenAtual.getId()];
+		if (descricao.contains("cstr")) {
+			return "constante_str";
+		} else if (descricao.contains("EOF")) {
+			return "EOF";
+		}
+		return descricao;
 	}
 
 	private String getLinha(int position) {
