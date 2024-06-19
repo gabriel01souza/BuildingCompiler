@@ -34,7 +34,7 @@ public class CompiladorService {
 			}
 		} catch (SyntaticError e) {
 			Token tokenAtual = sintatico.getCurrentToken();
-
+			
 			messageArea.setText("Erro na linha " + getLinha(e.getPosition()) + " - encontrado "
 					+ getDescription(tokenAtual) + " " + e.getMessage());
 		} catch (SemanticError e) {
@@ -44,12 +44,12 @@ public class CompiladorService {
 
 	private String getDescription(Token tokenAtual) {
 		String descricao = ParserConstants.PARSER_ERROR[tokenAtual.getId()];
-		if (descricao.contains("cstr")) {
+		if (descricao.contains("str")) {
 			return "constante_str";
 		} else if (descricao.contains("EOF")) {
 			return "EOF";
 		}
-		return descricao;
+		return tokenAtual.getLexeme();
 	}
 
 	private String getLinha(int position) {

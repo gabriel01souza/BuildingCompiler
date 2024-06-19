@@ -1128,7 +1128,7 @@ public interface ScannerConstants
             "",
             "",
             "constante_str inválida",
-            "Erro identificando cbin ou chexa",
+            "constante_bin ou constante_hexa inválida",
             "",
             "",
             "",
