@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class compiler_interface<Buttons> {
 
+	
 	static Display display = null;
 	private String currentFilePath = null;
 	private Shell shell;
