@@ -72,9 +72,52 @@ public class Semantico implements Constants {
 		pilhasTipo.add("bool");
 		codigoObjeto += "ldc.i4.0 \n";
 	}
+	
+	// OK
+	private void regra119() {
+		pilhasTipo.pop();
+		codigoObjeto += "ldc.i4.0 \n";
+	}
 
+	// VERIFICACAO
+	private void regra120(Token token) {
+		operadorRelacional = token.getLexeme();
+	}
+	
 	// PENDENTE
-	private void regra122_123_124_125() { // dividir cada uma acao
+	private void regra121() {		
+		pilhasTipo.pop();
+		pilhasTipo.pop();
+		pilhasTipo.push("bool");
+		codigoObjeto += "ldc.i4.1 \n"
+				+ "xor \n";
+	}
+
+	// OK
+	private void regra122() { // dividir cada uma acao
+		pop2Push1_Operator();
+		codigoObjeto += "add \n";
+	}
+
+	// OK
+	private void regra123() { // dividir cada uma acao
+		pop2Push1_Operator();
+		codigoObjeto += "sub \n";
+	}
+
+	// OK
+	private void regra124() { // dividir cada uma acao
+		pop2Push1_Operator();
+		codigoObjeto += "mul";
+	}
+
+	// OK
+	private void regra125() { // dividir cada uma acao
+		pop2Push1_Operator();
+		codigoObjeto += "div";
+	}
+
+	private void pop2Push1_Operator() {
 		String operador1 = pilhasTipo.pop();
 		String operador2 = pilhasTipo.pop();
 		
@@ -83,8 +126,6 @@ public class Semantico implements Constants {
 		} else {
 			pilhasTipo.push("float64");
 		}
-		codigoObjeto += "ldc.i8 -1 \n"
-				+ "mul \n";
 	}
 	
 	// OK
