@@ -1,8 +1,8 @@
 import org.eclipse.swt.custom.StyledText;
 
+import parte04.ParserConstants;
 import parte3.LexicalError;
 import parte3.Lexico;
-import parte3.ParserConstants;
 import parte3.SemanticError;
 import parte3.Semantico;
 import parte3.Sintatico;
