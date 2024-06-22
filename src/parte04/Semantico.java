@@ -14,7 +14,7 @@ public class Semantico implements Constants {
 	String codigoObjeto = "";
 	List<String> listaId = new ArrayList<String>();
 	String operadorRelacional = "";
-	Stack<String> pilhasTipo = new Stack<String>();
+	Stack<ETipo> pilhasTipo = new Stack<ETipo>();
 	Stack<String> pilhasRotulo = new Stack<String>();
 	Map<String, Simbolo> tabelaSimbolos = new HashMap<String, Simbolo>();
 
@@ -50,26 +50,49 @@ public class Semantico implements Constants {
 		codigoObjeto += "ret\n" + "}\n" + "}";
 	}
 
-	//
+	// VERIFICAR CRIACAO DO SIMBOLO
 	public void regra102(Token token) throws SemanticError {
 		String lexema = token.getLexeme();
-		
+
 		if (tabelaSimbolos.containsKey(lexema)) {
 			throw new SemanticError(lexema + " já declarado");
-		} 
-		
-		tabelaSimbolos.put(lexema, new Simbolo())
+		}
+		ETipo tipo = pilhasTipo.pop();
+		tabelaSimbolos.put(lexema, new Simbolo(pilhasTipo.pop(), Boolean.FALSE));
+		codigoObjeto += ".locals (" + tipo.descricao + " " + lexema + ") \n";
 	}
 
-	//
+	// OK
 	public void regra103() {
 		listaId.clear();
 	}
 
-	//
+	// VERIFICAR A ENTRADA DO BOOL
 	public void regra104(Token token) {
 		String lex = token.getLexeme();
 
+		for (String id : listaId) {
+			Simbolo simbolo = tabelaSimbolos.get(id);
+
+			switch (simbolo.getTipo()) {
+			case STRING:
+				codigoObjeto += "ldstr " + id + " \n";
+				break;
+			case BOOL:
+				codigoObjeto += "ldc.i4.1 " + id + " \n";
+				break;
+			case FLOAT_64:
+				codigoObjeto += "ldc.r8 " + id + " \n";
+				break;
+			case INT64:
+				codigoObjeto += "ldc.i8 " + id + " \n";
+				break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + simbolo.getTipo());
+			}
+			codigoObjeto += "stloc " + id + " \n";
+			simbolo.setUsed(Boolean.TRUE);
+		}
 	}
 
 	// OK
@@ -78,7 +101,7 @@ public class Semantico implements Constants {
 	}
 
 	private void regra106() throws SemanticError {
-		String tipo = pilhasTipo.pop();
+		ETipo tipo = pilhasTipo.pop();
 		if (ETipo.INT64.descricao.equals(tipo)) {
 			codigoObjeto += "conv.i8 \n";
 		}
@@ -144,8 +167,8 @@ public class Semantico implements Constants {
 
 	// OK
 	private void regra108() {
-		String tipoDesempilhado = pilhasTipo.pop();
-		if (tipoDesempilhado == "int64") {
+		ETipo tipoDesempilhado = pilhasTipo.pop();
+		if (ETipo.INT64.equals(tipoDesempilhado)) {
 			codigoObjeto += "conv.i8 \n";
 		}
 		codigoObjeto += "call void [mscorlib]System.Console::WriteLine(" + tipoDesempilhado + ") \n";
@@ -201,7 +224,7 @@ public class Semantico implements Constants {
 	private void regra115() {
 		pilhasTipo.pop();
 		pilhasTipo.pop();
-		pilhasTipo.add("bool");
+		pilhasTipo.add(ETipo.BOOL);
 
 		codigoObjeto += "ldc.i4.1 \n";
 	}
@@ -210,20 +233,20 @@ public class Semantico implements Constants {
 	private void regra116() {
 		pilhasTipo.pop();
 		pilhasTipo.pop();
-		pilhasTipo.add("bool");
+		pilhasTipo.add(ETipo.BOOL);
 
 		codigoObjeto += "ldc.i4.01 \n";
 	}
 
 	// OK
 	private void regra117() {
-		pilhasTipo.add("bool");
+		pilhasTipo.add(ETipo.BOOL);
 		codigoObjeto += "ldc.i4.1 \n";
 	}
 
 	// OK
 	private void regra118() {
-		pilhasTipo.add("bool");
+		pilhasTipo.add(ETipo.BOOL);
 		codigoObjeto += "ldc.i4.0 \n";
 	}
 
@@ -242,7 +265,7 @@ public class Semantico implements Constants {
 	private void regra121() {
 		pilhasTipo.pop();
 		pilhasTipo.pop();
-		pilhasTipo.push("bool");
+		pilhasTipo.add(ETipo.BOOL);
 
 		switch (operadorRelacional) {
 		case ">":
@@ -287,13 +310,13 @@ public class Semantico implements Constants {
 	}
 
 	private void pop2Push1_Operator() {
-		String operador1 = pilhasTipo.pop();
-		String operador2 = pilhasTipo.pop();
+		ETipo operador1 = pilhasTipo.pop();
+		ETipo operador2 = pilhasTipo.pop();
 
 		if ("int64".equals(operador1) && "int64".equals(operador2)) {
-			pilhasTipo.push("int64");
+			pilhasTipo.push(ETipo.INT64);
 		} else {
-			pilhasTipo.push("float64");
+			pilhasTipo.push(ETipo.FLOAT_64);
 		}
 	}
 
@@ -306,7 +329,7 @@ public class Semantico implements Constants {
 			if (ETipo.INT64.descricao.equals(tipo)) {
 				codigoObjeto += "conv.r8 \n";
 			}
-			pilhasTipo.add(tipo.descricao);
+			pilhasTipo.add(tipo);
 		} else {
 			throw new SemanticError(token.getLexeme() + " não declarado");
 		}
@@ -314,25 +337,25 @@ public class Semantico implements Constants {
 
 	// OK
 	public void regra127(Token token) {
-		pilhasTipo.add("int64");
+		pilhasTipo.add(ETipo.INT64);
 		codigoObjeto += "ldc.i8 " + token.getLexeme() + " \n" + "conv.r8 \n";
 	}
 
 	// OK
 	public void regra128(Token token) {
-		pilhasTipo.add("float64");
+		pilhasTipo.add(ETipo.FLOAT_64);
 		codigoObjeto += "ldc.r8 " + token.getLexeme() + " \n";
 	}
 
 	// OK
 	public void regra129(Token token) {
-		pilhasTipo.add("string");
+		pilhasTipo.add(ETipo.STRING);
 		codigoObjeto += "ldstr " + token.getLexeme() + " \n";
 	}
 
 	// DUVIDA
 	public void regra130(Token token) {
-		String operador = pilhasTipo.pop();
+		ETipo operador = pilhasTipo.pop();
 		codigoObjeto += "ldc.i8 -1 \n" + "mul \n";
 		pilhasTipo.push(operador);
 	}
