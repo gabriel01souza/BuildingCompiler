@@ -1,4 +1,4 @@
-package parte04;
+package paraRemover;
 
 public class Lexico implements Constants
 {

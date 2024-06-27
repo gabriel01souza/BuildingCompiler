@@ -1,13 +1,13 @@
 import org.eclipse.swt.custom.StyledText;
 
-import parte04.ParserConstants;
-import parte3.LexicalError;
-import parte3.Lexico;
-import parte3.SemanticError;
-import parte3.Semantico;
-import parte3.Sintatico;
-import parte3.SyntaticError;
-import parte3.Token;
+import parte_novo4.ParserConstants;
+import parte_novo4.LexicalError;
+import parte_novo4.Lexico;
+import parte_novo4.SemanticError;
+import parte_novo4.Semantico;
+import parte_novo4.Sintatico;
+import parte_novo4.SyntaticError;
+import parte_novo4.Token;
 
 public class CompiladorService {
 
@@ -38,7 +38,7 @@ public class CompiladorService {
 			messageArea.setText("Erro na linha " + getLinha(e.getPosition()) + " - encontrado "
 					+ getDescription(tokenAtual) + " " + e.getMessage());
 		} catch (SemanticError e) {
-			// Trata erros semânticos
+			messageArea.setText("Erro na linha " + getLinha(e.getPosition()) + " - " + e.getMessage());
 		}
 	}
 

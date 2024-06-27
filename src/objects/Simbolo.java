@@ -1,6 +1,6 @@
 package objects;
 
-import parte04.ETipo;
+import paraRemover.ETipo;
 
 public class Simbolo {
 

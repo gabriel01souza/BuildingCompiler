@@ -1,4 +1,5 @@
-package parte04;
+package parte_novo4;
+
 
 public interface Constants extends ScannerConstants, ParserConstants
 {

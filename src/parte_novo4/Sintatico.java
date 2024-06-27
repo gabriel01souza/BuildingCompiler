@@ -1,4 +1,4 @@
-package parte04;
+package parte_novo4;
 
 import java.util.Stack;
 
@@ -81,7 +81,7 @@ public class Sintatico implements Constants
         if (p >= 0)
         {
             int[] production = PRODUCTIONS[p];
-            //empilha a produção em ordem reversa
+            //empilha a produï¿½ï¿½o em ordem reversa
             for (int i=production.length-1; i>=0; i--)
             {
                 stack.push(new Integer(production[i]));
@@ -106,4 +106,10 @@ public class Sintatico implements Constants
         while ( ! step() )
             ;
     }
+
+    public Token getCurrentToken() {
+    	return this.currentToken;
+    }
 }
+
+

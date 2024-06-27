@@ -1,5 +1,7 @@
-package parte04;
+package parte_novo4;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Objects;
 import java.util.Stack;
 
 import objects.Simbolo;
+import paraRemover.ETipo;
 
 public class Semantico implements Constants {
 
@@ -16,6 +19,7 @@ public class Semantico implements Constants {
 	String operadorRelacional = "";
 	Stack<ETipo> pilhasTipo = new Stack<ETipo>();
 	Stack<String> pilhasRotulo = new Stack<String>();
+	private int numeroRotulo = 0;
 	Map<String, Simbolo> tabelaSimbolos = new HashMap<String, Simbolo>();
 
 	public void executeAction(int action, Token token) throws SemanticError {
@@ -26,40 +30,147 @@ public class Semantico implements Constants {
 		case 101:
 			this.regra101();
 			break;
+		case 102:
+			this.regra102(token);
+			break;
+		case 103:
+			this.regra103();
+			break;
+		case 104:
+			this.regra104(token);
+			break;
+		case 105:
+			this.regra105(token);
+			break;
+		case 106:
+			this.regra106(token);
+			break;
+		case 107:
+			this.regra107(token);
+			break;
 		case 108:
 			this.regra108();
+			break;
+		case 109:
+			this.regra109();
+			break;
+		case 110:
+			this.regra110();
+			break;
+		case 111:
+			this.regra111();
+			break;
+		case 112:
+			this.regra112();
+			break;
+		case 113:
+			this.regra113();
+			break;
+		case 114:
+			this.regra114();
+			break;
+		case 115:
+			this.regra115();
+			break;
+		case 116:
+			this.regra116();
+			break;
+		case 117:
+			this.regra117();
+			break;
+		case 118:
+			this.regra118();
+			break;
+		case 119:
+			this.regra119();
+			break;
+		case 120:
+			this.regra120(token);
+			break;
+		case 121:
+			this.regra121();
+			break;
+		case 122:
+			this.regra122();
+			break;
+		case 123:
+			this.regra123();
+			break;
+		case 124:
+			this.regra124();
+			break;
+		case 125:
+			this.regra125();
+			break;
+		case 126:
+			this.regra126(token);
+			break;
+		case 127:
+			this.regra127(token);
+			break;
+		case 128:
+			this.regra128(token);
 			break;
 		case 129:
 			this.regra129(token);
 			break;
+		case 130:
+			this.regra130(token);
+			break;
 		default:
-			this.regra127(token);
-			System.out.println(codigoObjeto);
+			break;
 		}
 	}
 
 	// OK
 	public void regra100() {
-		codigoObjeto += ".assembly extern mycolic {} \n " + ".assembly _codigo_objeto{} \n "
-				+ ".module _codigo_objeto.exe \n " + ".class public _UNICA{  \n "
-				+ ".method static public void _principal() { \n" + ".entrypoint); \n";
+		codigoObjeto += ".assembly extern mycolic {} \n " 
+				+ ".assembly _codigo_objeto{} \n "
+				+ ".module _codigo_objeto.exe \n " 
+				+ ".class public _UNICA{  \n "
+				+ ".method static public void _principal() { \n" 
+				+ ".entrypoint; \n";
 	}
 
 	// OK
 	public void regra101() {
-		codigoObjeto += "ret\n" + "}\n" + "}";
+		codigoObjeto += "ret \n" 
+					+ "} \n" 
+				+ "}";
+		gerarArquivoObjeto(codigoObjeto);
 	}
 
-	// VERIFICAR CRIACAO DO SIMBOLO
-	public void regra102(Token token) throws SemanticError {
-		String lexema = token.getLexeme();
+	private void gerarArquivoObjeto(String codigoObjeto) {
+		String texto = codigoObjeto;
+        String nomeArquivo = "codigo_objeto.il";
 
-		if (tabelaSimbolos.containsKey(lexema)) {
-			throw new SemanticError(lexema + " já declarado");
-		}
-		ETipo tipo = pilhasTipo.pop();
-		tabelaSimbolos.put(lexema, new Simbolo(pilhasTipo.pop(), Boolean.FALSE));
-		codigoObjeto += ".locals (" + tipo.descricao + " " + lexema + ") \n";
+        try (FileWriter escritor = new FileWriter(nomeArquivo)) {
+            escritor.write(texto);
+            System.out.println("Arquivo criado com sucesso: " + nomeArquivo);
+        } catch (IOException e) {
+            System.err.println("Erro ao criar arquivo: " + e.getMessage());
+        }
+		
+	}
+
+	// OK
+	public void regra102(Token token) throws SemanticError {
+		String tipo = token.getLexeme();
+		ETipo tipoToken = ETipo.getTipoByString(tipo);
+		pilhasTipo.add(tipoToken);
+		
+		listaId.forEach(id -> {
+			try {
+				if (tabelaSimbolos.containsKey(id)) {
+					throw new SemanticError(id + " já declarado", token.getPosition());
+				}
+			} catch (SemanticError e) {
+				e.printStackTrace();
+			}
+
+			tabelaSimbolos.put(id, new Simbolo(pilhasTipo.peek(), Boolean.FALSE));
+			codigoObjeto += ".locals (" + tipoToken.descricao + " " + id + ") \n";
+		});
 	}
 
 	// OK
@@ -67,7 +178,7 @@ public class Semantico implements Constants {
 		listaId.clear();
 	}
 
-	// VERIFICAR A ENTRADA DO BOOL
+	// OK
 	public void regra104(Token token) {
 		String lex = token.getLexeme();
 
@@ -76,16 +187,20 @@ public class Semantico implements Constants {
 
 			switch (simbolo.getTipo()) {
 			case STRING:
-				codigoObjeto += "ldstr " + id + " \n";
+				codigoObjeto += "ldstr " + lex + " \n";
 				break;
 			case BOOL:
-				codigoObjeto += "ldc.i4.1 " + id + " \n";
+				if (lex.equals("true")) {
+					codigoObjeto += "ldc.i4.1 " + lex + " \n";
+				} else {
+					codigoObjeto += "ldc.i4.0 " + lex + " \n";
+				}
 				break;
 			case FLOAT_64:
-				codigoObjeto += "ldc.r8 " + id + " \n";
+				codigoObjeto += "ldc.r8 " + lex + " \n";
 				break;
 			case INT64:
-				codigoObjeto += "ldc.i8 " + id + " \n";
+				codigoObjeto += "ldc.i8 " + lex + " \n";
 				break;
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + simbolo.getTipo());
@@ -100,9 +215,10 @@ public class Semantico implements Constants {
 		listaId.add(token.getLexeme());
 	}
 
-	private void regra106() throws SemanticError {
+	// OK
+	private void regra106(Token token) throws SemanticError {
 		ETipo tipo = pilhasTipo.pop();
-		if (ETipo.INT64.descricao.equals(tipo)) {
+		if (ETipo.INT64.descricao.equals(tipo.descricao)) {
 			codigoObjeto += "conv.i8 \n";
 		}
 		adicionaCodigoDUP();
@@ -113,7 +229,7 @@ public class Semantico implements Constants {
 				codigoObjeto += "stloc " + id + " \n";
 				simbolo.setUsed(Boolean.TRUE);
 			} else {
-				throw new SemanticError(id + " não declarado");
+				throw new SemanticError(id + " não declarado", token.getPosition());
 			}
 		}
 		listaId.clear();
@@ -126,7 +242,7 @@ public class Semantico implements Constants {
 	}
 
 	// OK
-	private void regra107() throws SemanticError {
+	private void regra107(Token token) throws SemanticError {
 		for (String id : listaId) {
 			ETipo tipo = tabelaSimbolos.get(id).getTipo();
 
@@ -135,15 +251,15 @@ public class Semantico implements Constants {
 				parseIfNecessery(tipo);
 				codigoObjeto += "stloc " + id + " \n";
 			} else {
-				throw new SemanticError(id + " não declarado");
+				throw new SemanticError(id + " não declarado", token.getPosition());
 			}
 		}
 		listaId.clear();
 	}
 
 	private void parseIfNecessery(ETipo tipo) {
-		if (!ETipo.STRING.equals(tipo)) {
-			codigoObjeto += "call " + tipo + " [mscorlib]System.+" + getClasse(tipo) + "::Parse(string) \n";
+		if (!ETipo.STRING.descricao.equals(tipo.descricao)) {
+			codigoObjeto += "call " + tipo.descricao + " [mscorlib]System." + getClasse(tipo) + "::Parse(string) \n";
 		}
 	}
 
@@ -168,17 +284,19 @@ public class Semantico implements Constants {
 	// OK
 	private void regra108() {
 		ETipo tipoDesempilhado = pilhasTipo.pop();
-		if (ETipo.INT64.equals(tipoDesempilhado)) {
+		if (ETipo.INT64.descricao.equals(tipoDesempilhado.descricao)) {
 			codigoObjeto += "conv.i8 \n";
 		}
-		codigoObjeto += "call void [mscorlib]System.Console::WriteLine(" + tipoDesempilhado + ") \n";
+		codigoObjeto += "call void [mscorlib]System.Console::WriteLine(" + tipoDesempilhado.descricao + ") \n";
 	}
 
 	// OK
 	private void regra109() {
-		String novoRotulo = " novo_rotulo:";
+		numeroRotulo++;
+		String novoRotulo = "r_"+ numeroRotulo;
 		pilhasRotulo.add(novoRotulo);
-		String novoRotulo2 = " novo_rotulo:";
+		numeroRotulo++;
+		String novoRotulo2 = "r_"+ numeroRotulo;
 		codigoObjeto += "brfalse " + novoRotulo2 + " \n";
 		pilhasRotulo.add(novoRotulo2);
 	}
@@ -186,7 +304,7 @@ public class Semantico implements Constants {
 	// OK
 	private void regra110() {
 		String rotulo = pilhasRotulo.pop();
-		codigoObjeto += rotulo + ": \n";
+		codigoObjeto += rotulo+": \n";
 	}
 
 	// OK
@@ -199,18 +317,21 @@ public class Semantico implements Constants {
 		codigoObjeto += rotulo2 + ": \n";
 	}
 
-	// REVISAR CRIACAO DO ROTULO
+	// OK
 	private void regra112() {
-		String novoRotulo = " novo_rotulo:";
+		numeroRotulo++;
+		String novoRotulo = "r_"+numeroRotulo;
 
 		codigoObjeto += "brfalse " + novoRotulo + " \n";
 		pilhasRotulo.add(novoRotulo);
 	}
 
-	// REVISAR CRIACAO DO ROTULO
+	// OK
 	private void regra113() {
-		String novoRotulo = " novo_rotulo:";
-
+		numeroRotulo++;
+		String novoRotulo = "r_"+ numeroRotulo;
+		
+		codigoObjeto += novoRotulo+": \n";
 		pilhasRotulo.add(novoRotulo);
 	}
 
@@ -220,7 +341,7 @@ public class Semantico implements Constants {
 		codigoObjeto += "brfalse " + rotulo + " \n";
 	}
 
-	// CONFIRMAR
+	// OK
 	private void regra115() {
 		pilhasTipo.pop();
 		pilhasTipo.pop();
@@ -229,13 +350,13 @@ public class Semantico implements Constants {
 		codigoObjeto += "ldc.i4.1 \n";
 	}
 
-	// CONFIRMAR
+	// OK
 	private void regra116() {
 		pilhasTipo.pop();
 		pilhasTipo.pop();
 		pilhasTipo.add(ETipo.BOOL);
 
-		codigoObjeto += "ldc.i4.01 \n";
+		codigoObjeto += "ldc.i4.0 \n";
 	}
 
 	// OK
@@ -256,12 +377,12 @@ public class Semantico implements Constants {
 		codigoObjeto += "ldc.i4.0 \n";
 	}
 
-	// VERIFICACAO
+	// OK
 	private void regra120(Token token) {
 		operadorRelacional = token.getLexeme();
 	}
 
-	// VERIFICAR O OPERADOR RELACIONAL !=
+	// OK
 	private void regra121() {
 		pilhasTipo.pop();
 		pilhasTipo.pop();
@@ -300,20 +421,20 @@ public class Semantico implements Constants {
 	// OK
 	private void regra124() { // dividir cada uma acao
 		pop2Push1_Operator();
-		codigoObjeto += "mul";
+		codigoObjeto += "mul \n";
 	}
 
 	// OK
 	private void regra125() { // dividir cada uma acao
 		pop2Push1_Operator();
-		codigoObjeto += "div";
+		codigoObjeto += "div \n";
 	}
 
 	private void pop2Push1_Operator() {
 		ETipo operador1 = pilhasTipo.pop();
 		ETipo operador2 = pilhasTipo.pop();
 
-		if ("int64".equals(operador1) && "int64".equals(operador2)) {
+		if ("int64".equals(operador1.descricao) && "int64".equals(operador2.descricao)) {
 			pilhasTipo.push(ETipo.INT64);
 		} else {
 			pilhasTipo.push(ETipo.FLOAT_64);
@@ -326,19 +447,20 @@ public class Semantico implements Constants {
 			codigoObjeto += "ldloc " + token.getLexeme() + " \n";
 			ETipo tipo = tabelaSimbolos.get(token.getLexeme()).getTipo();
 
-			if (ETipo.INT64.descricao.equals(tipo)) {
+			if (ETipo.INT64.descricao.equals(tipo.descricao)) {
 				codigoObjeto += "conv.r8 \n";
 			}
 			pilhasTipo.add(tipo);
 		} else {
-			throw new SemanticError(token.getLexeme() + " não declarado");
+			throw new SemanticError(token.getLexeme() + " não declarado", token.getPosition());
 		}
 	}
 
 	// OK
 	public void regra127(Token token) {
 		pilhasTipo.add(ETipo.INT64);
-		codigoObjeto += "ldc.i8 " + token.getLexeme() + " \n" + "conv.r8 \n";
+		codigoObjeto += "ldc.i8 " + token.getLexeme() + " \n" 
+					+ "conv.r8 \n";
 	}
 
 	// OK
@@ -353,10 +475,11 @@ public class Semantico implements Constants {
 		codigoObjeto += "ldstr " + token.getLexeme() + " \n";
 	}
 
-	// DUVIDA
+	// OK
 	public void regra130(Token token) {
 		ETipo operador = pilhasTipo.pop();
-		codigoObjeto += "ldc.i8 -1 \n" + "mul \n";
+		codigoObjeto += "ldc.i8 -1 \n" 
+					+ "mul \n";
 		pilhasTipo.push(operador);
 	}
 

@@ -2,6 +2,9 @@ package parte3;
 
 import java.util.Stack;
 
+import paraRemover.SemanticError;
+import paraRemover.Semantico;
+
 public class Sintatico implements Constants
 {
     private Stack stack = new Stack();
@@ -105,9 +108,5 @@ public class Sintatico implements Constants
 
         while ( ! step() )
             ;
-    }
-    
-    public Token getCurrentToken() {
-    	return this.currentToken;
     }
 }
