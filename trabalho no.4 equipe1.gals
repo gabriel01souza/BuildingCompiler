@@ -1,0 +1,214 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+Package = parte04
+ScannerCaseSensitive = false
+ScannerTable = Compact
+Input = String
+Parser = LL
+#RegularDefinitions
+inteira: 0|[1-9][0-9]*
+fracionaria: 0|[0-9]*[1-9]
+#Tokens
+: [\r\s\n\t]
+
+//letra A
+
+id: [a-zA-Z](_?[a-zA-Z0-9]+)*_?
+
+//letra B
+
+cint: 0|[1-9][0-9]*
+
+//letra C
+
+cfloat: {inteira}\.{fracionaria}
+
+//letra D
+
+cbin: #b(0|1)+
+
+//letra E
+
+chexa: #h([0-9]|a|b|c|d|e|f)+
+//letra F
+
+cstr: \"[^\"\n\\]*\"
+
+//letra G
+
+:! \?[^\n]*
+
+// letra H
+
+:! &\-([^\-]|\-+[^&\-])*\-+& //reconhecido e ignorado
+
+//palavras reservadas
+
+bin = id: "bin" 
+bool = id: "bool" 
+elif = id: "elif"
+else = id: "else"
+endif = id: "endif"
+false = id: "false"
+float = id: "float"
+hexa = id: "hexa"
+if = id: "if"
+int = id: "int"
+input = id: "input"
+main = id: "main"
+output = id: "output"
+str = id: "str" 
+toInt = id: "toInt"
+toBin = id: "toBin"
+toHexa = id: "toHexa"
+true = id: "true"
+repeat = id: "repeat"
+until = id: "until"
+
+//sïmbolos especiais
+
+"+"
+"-"
+"*"
+"/"
+"," 
+"." 
+";" 
+"=" 
+":"
+"("
+")"
+"&"
+"|"
+"!"
+"=="
+"!="
+"<"
+">"
+"+"
+"-"
+"*"
+"/"
+#NonTerminals
+<programa> //primeiro
+<declaracao_variaveis>
+<lista_variaveis1>
+<lista_variaveis2>
+<lista_comandos>
+<comando>
+<atribuicao> 
+<entrada_dados> 
+<saida_dados> 
+<cmd_selecao>
+<cmd_repeticao>
+<lista_variaveis>
+<lista_id>
+<lista_id1>
+<tipo>
+<valor>
+<expressao>
+<condicoes>
+<else>
+<lista_expressoes>
+<lista_expressoes1>
+
+
+<elemento>
+<expressao_>
+<relacional>
+<aritmetica>
+<relacional_>
+<operador_relacional>
+<termo>
+<aritmetica_>
+<fator>
+<termo_>
+<membro>
+<membro_>
+<membro__>
+
+<comando_>
+
+
+
+
+
+
+
+
+
+
+
+#Grammar
+<programa> ::= #100 <declaracao_variaveis> main <lista_comandos> #101;
+
+//<lista_comandos> ::= <comando> ";" | <comando> ";" <lista_comandos> ;
+
+<lista_comandos> ::= <comando> ";" <comando_> ;
+
+<comando_> ::= <lista_comandos> | î ;
+
+<comando> ::= <atribuicao> | <entrada_dados> | <saida_dados> | <cmd_selecao> | <cmd_repeticao>;
+
+<declaracao_variaveis> ::= <lista_variaveis> | î;
+
+<lista_variaveis> ::= <lista_id> ":" <tipo> <lista_variaveis1> ;
+<lista_variaveis1> ::= #102 ";" #103 <lista_variaveis2> | #102 "=" <valor> #104 ";" #103 <lista_variaveis2> ; 
+<lista_variaveis2> ::= <lista_variaveis> | î ;
+
+<lista_id> ::= id #105 <lista_id1> ;
+<lista_id1> ::= "," <lista_id> | î ;
+
+<tipo> ::= int | float | bin | hexa | bool | str;
+
+<valor> ::= cint | cfloat | cbin | chexa | true | false | cstr;
+
+<atribuicao> ::= <lista_id> "=" <expressao> #106;
+
+<entrada_dados> ::= input "(" <lista_id> #107 ")";
+
+<saida_dados> ::= output "(" <lista_expressoes> ")";
+
+<lista_expressoes> ::= <expressao> #108 <lista_expressoes1> ;
+<lista_expressoes1> ::= "," <lista_expressoes> | î ;
+
+<cmd_selecao> ::= if <expressao> #109 ":" <lista_comandos> <condicoes> #111 <else> endif #110; //Verificar endif professora 
+ 
+<condicoes> ::= #111 elif <expressao> #112 ":" <lista_comandos> <condicoes> | î; 
+
+<else> ::= else <lista_comandos> | î;
+
+<cmd_repeticao> ::= repeat #113 <lista_comandos> until <expressao> #114;
+
+
+
+
+<expressao> ::= <elemento> <expressao_> ;
+ 
+<expressao_> ::= î | "&" <elemento> #115 <expressao_> | "|" <elemento> #116 <expressao_> ; 
+<elemento> ::= <relacional> | true #117 | false #118 | "!" <elemento> #119; 
+<relacional> ::= <aritmetica> <relacional_> ; 
+<relacional_> ::= î | <operador_relacional> #120 <aritmetica> #121; 
+<operador_relacional> ::= "==" | "!=" | "<" | ">" ; 
+<aritmetica> ::= <termo> <aritmetica_> ; 
+<aritmetica_> ::= î | "+"  <termo> #122 <aritmetica_> | "-" <termo> #123 <aritmetica_> ; 
+<termo> ::= <fator> <termo_> ; 
+<termo_> ::= î | "*" <fator> #124 <termo_> | "/" <fator> #125 <termo_> ; 
+<fator> ::= <membro> <membro_> ; 
+<membro> ::= id #126 | 
+ cint #127 | 
+ cfloat #128 | 
+ cbin| 
+ chexa | 
+ cstr #129| 
+ "(" <expressao> ")" | 
+ "+" <membro> | 
+ "-" <membro> #130 ; 
+<membro_> ::= î | "." <membro__> ; 
+<membro__> ::= toInt | toBin | toHexa ; 
+
