@@ -1,10 +1,10 @@
 package objects;
 
-import paraRemover.ETipo;
+import parte04.ETipo;
 
 public class Simbolo {
 
-	private ETipo tipo;
+	private parte04.ETipo tipo;
 	private boolean isUsed;
 
 	public Simbolo() {

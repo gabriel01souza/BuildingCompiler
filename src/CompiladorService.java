@@ -1,13 +1,13 @@
 import org.eclipse.swt.custom.StyledText;
 
-import parte_novo4.ParserConstants;
-import parte_novo4.LexicalError;
-import parte_novo4.Lexico;
-import parte_novo4.SemanticError;
-import parte_novo4.Semantico;
-import parte_novo4.Sintatico;
-import parte_novo4.SyntaticError;
-import parte_novo4.Token;
+import parte04.LexicalError;
+import parte04.Lexico;
+import parte04.ParserConstants;
+import parte04.SemanticError;
+import parte04.Semantico;
+import parte04.Sintatico;
+import parte04.SyntaticError;
+import parte04.Token;
 
 public class CompiladorService {
 
