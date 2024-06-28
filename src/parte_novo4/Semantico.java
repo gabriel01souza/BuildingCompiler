@@ -337,7 +337,7 @@ public class Semantico implements Constants {
 
 	// OK
 	private void regra114() {
-		String rotulo = pilhasRotulo.pop();
+		String rotulo = pilhasRotulo.peek();
 		codigoObjeto += "brfalse " + rotulo + " \n";
 	}
 
