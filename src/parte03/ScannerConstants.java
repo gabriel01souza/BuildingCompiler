@@ -1,4 +1,4 @@
-package parte02;
+package parte03;
 
 public interface ScannerConstants
 {
@@ -1117,51 +1117,50 @@ public interface ScannerConstants
         { 0, 0, 0, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 };
 
     String[] SPECIAL_CASES_KEYS =
-        {  "bin", "bool", "elif", "else", "endif", "false", "float", "hexa", "if", "input", "int", "main", "output", "repeat", "str", "toBin", "toHexa", "toInt", "true", "until" };
+        {  "BIN", "BOOL", "ELIF", "ELSE", "ENDIF", "FALSE", "FLOAT", "HEXA", "IF", "INPUT", "INT", "MAIN", "OUTPUT", "REPEAT", "STR", "TOBIN", "TOHEXA", "TOINT", "TRUE", "UNTIL" };
 
     int[] SPECIAL_CASES_VALUES =
         {  8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 17, 19, 20, 26, 21, 23, 24, 22, 25, 27 };
 
     String[] SCANNER_ERROR =
-    {
-        "símbolo inválido",
-        "",
-        "",
-        "constante_str inválida",
-        "Erro identificando cbin ou chexa",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "constante_bin inválida",
-        "constante_hexa inválida",
-        "Comentário de bloco inválido ou não finalizado",
-        "Erro identificando cfloat",
-        "",
-        "",
-        "",
-        "",
-        "Comentário de bloco inválido ou não finalizado",
-        "",
-        "",
-        "Erro identificando cfloat"
-    };
-
+        {
+            "símbolo inválido",
+            "",
+            "",
+            "constante_str inválida",
+            "constante_bin ou constante_hexa inválida",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "constante_bin inválida",
+            "constante_hexa inválida",
+            "Comentário de bloco inválido ou não finalizado",
+            "Erro identificando cfloat",
+            "",
+            "",
+            "",
+            "",
+            "Comentário de bloco inválido ou não finalizado",
+            "",
+            "",
+            "Erro identificando cfloat"
+        };
 }

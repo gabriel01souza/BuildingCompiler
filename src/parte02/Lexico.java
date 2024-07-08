@@ -1,3 +1,5 @@
+package parte02;
+
 public class Lexico implements Constants
 {
     private int position;

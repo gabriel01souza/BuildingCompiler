@@ -1,0 +1,92 @@
+#Options
+GenerateScanner = true
+GenerateParser = false
+Language = Java
+ScannerName = Lexico
+ScannerCaseSensitive = true
+ScannerTable = Compact
+Input = Stream
+#RegularDefinitions
+inteira: 0|[1-9][0-9]*
+fracionaria: 0|[0-9]*[1-9]
+#Tokens
+: [\r\s\n\t]
+
+//letra A
+
+id: [a-zA-Z](_?[a-zA-Z0-9]+)*_?
+
+//letra B
+
+cint: 0|[1-9][0-9]*
+
+//letra C
+
+cfloat: {inteira}\.{fracionaria}
+
+//letra D
+
+cbin: #b(0|1)+
+
+//letra E
+
+chexa: #h([0-9]|a|b|c|d|e|f)+
+//letra F
+
+cstr: \"[^\"\n\\]*\"
+
+//letra G
+
+:! \?[^\n]*
+
+// letra H
+
+:! &\-([^\-]|\-+[^&\-])*\-+& //reconhecido e ignorado
+
+//palavras reservadas
+
+bin = id: "bin" 
+bool = id: "bool" 
+elif = id: "elif"
+else = id: "else"
+endif = id: "endif"
+false = id: "false"
+float = id: "float"
+hexa = id: "hexa"
+if = id: "if"
+int = id: "int"
+input = id: "input"
+main = id: "main"
+output = id: "output"
+str = id: "str" 
+toInt = id: "toInt"
+toBin = id: "toBin"
+toHexa = id: "toHexa"
+true = id: "true"
+repeat = id: "repeat"
+until = id: "until"
+
+//s�mbolos especiais
+
+"+"
+"-"
+"*"
+"/"
+"," 
+"." 
+";" 
+"=" 
+":"
+"("
+")"
+"&"
+"|"
+"!"
+"=="
+"!="
+"<"
+">"
+"+"
+"-"
+"*"
+"/"
